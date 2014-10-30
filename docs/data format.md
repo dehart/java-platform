@@ -39,7 +39,7 @@ Example
 		}
 	},
 	'messages':[
-		{'type': 'error', 'text': 'The form contains errors'}
+		{'code':100, 'type': 'error', 'text': 'The form contains errors'}
 	],
 	'errors': [
 		'contact': {'name':'This field is required'}
