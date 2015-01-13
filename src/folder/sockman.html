@@ -1,0 +1,49 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<title>SocketMan</title>
+<script type="text/javascript">
+var socket;
+var socketIn;
+var socketOut;
+function init() {
+	socketIn = document.getElementById('in');
+	socketOut = document.getElementById('out');
+	sys('Trying to connect to localhost:12345...');
+
+	try{
+		var host = "ws://localhost:12345";
+		socket = new WebSocket(host);
+		sys('WebSocket - status '+socket.readyState);
+		socket.onopen    = function(msg){ sys("Connected - status "+this.readyState); };
+		socket.onmessage = function(msg){ res(msg.data); };
+		socket.onclose   = function(msg){ sys("Disconnected - status "+this.readyState); };
+	  }
+	  catch(ex){ sys(ex); }
+}
+function send(msg){
+	console.log('send');
+  if(!msg){ return; }
+  try{ socket.send(msg); sen(msg); } catch(ex){ sys(ex); }
+}
+function quit(){
+  log("[SYS] Goodbye!");
+  socket.close();
+  socket=null;
+}
+
+// Utilities
+function log(msg){ socketOut.value += msg+"\n"; socketOut.scrollTop = socketOut.scrollHeight; }
+function res(msg){ log("[RECV] "+msg); }
+function sys(msg){ log("[SYS] "+msg); }
+function sen(msg){ log("[SENT] "+msg); }
+function keyEvent(event){ if(event.keyCode==13){ send(event.target.value); event.target.value =''; } }
+</script>
+</head>
+<body onload="init()">
+<div id="sse">
+	<textarea id="out" style="width: 100%; height: 400px;"></textarea>
+	<input type="text" id="in" style="width: 70%;" onkeydown="keyEvent(event)" />
+</div>
+</body>
+</html>
